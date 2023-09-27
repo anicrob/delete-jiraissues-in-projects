@@ -28,6 +28,7 @@ const getProjectsKeys = async () => {
       }
     })
   );
+  console.log(projectKeys);
   return projectKeys;
 };
 
@@ -47,6 +48,7 @@ const getJiraIssueIds = async (projectKeys) => {
           }
         );
         let { issues } = await response.json();
+        console.log(issues);
         if (!Array.isArray(issues)) {
           issues = [issues];
         }
@@ -56,11 +58,13 @@ const getJiraIssueIds = async (projectKeys) => {
         }
       } catch (err) {
         console.log(
-          `you do not have access to view tickets in the ${key} project`
+          `you do not have access to view tickets in the ${key} project`,
+          err
         );
       }
     })
   );
+  console.log(issueKeys);
   return issueKeys;
 };
 
