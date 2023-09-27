@@ -56,8 +56,7 @@ const getJiraIssueIds = async (projectKeys) => {
         }
       } catch (err) {
         console.log(
-          `you do not have access to view tickets in the ${key} project`,
-          err
+          `you do not have access to view tickets in the ${key} project`
         );
       }
     })
