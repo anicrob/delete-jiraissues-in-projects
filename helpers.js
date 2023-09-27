@@ -28,7 +28,6 @@ const getProjectsKeys = async () => {
       }
     })
   );
-  console.log(projectKeys);
   return projectKeys;
 };
 
@@ -64,7 +63,6 @@ const getJiraIssueIds = async (projectKeys) => {
       }
     })
   );
-  console.log(issueKeys);
   return issueKeys;
 };
 
