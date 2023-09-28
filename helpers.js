@@ -46,19 +46,19 @@ const getJiraIssueIds = async (projectKeys) => {
             },
           }
         );
-        let { issues } = await response.json();
-        if (!Array.isArray(issues)) {
-          issues = [issues];
-        }
+        let data = await response.json();
+        const { issues } = data;
         if (issues) {
           const keys = issues.map((issue) => issue.key);
           issueKeys.push(...keys);
+        } else {
+          console.log(
+            `↠ No issues were found in project ${key}. This is what Atlassian says:\n
+            ${data.errorMessages}\n -------------------------------------------------------------------------------`
+          );
         }
       } catch (err) {
-        console.log(
-          `you do not have access to view tickets in the ${key} project`,
-          err
-        );
+        console.log(`Something went wrong with the ${key} project:`, err);
       }
     })
   );
