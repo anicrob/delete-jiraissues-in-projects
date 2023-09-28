@@ -17,7 +17,7 @@ const script = async () => {
     console.log("All issues in the projects you have access to have been collected. Starting to delete issues now...")
     await deleteTickets(issueKeys);
     console.log(
-      "The issues have been deleted. Please read the console for any errors that might have occurred"
+      "The issues have been deleted. Please read the console for any errors that might have occurred."
     );
   }
 };

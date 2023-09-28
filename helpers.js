@@ -47,7 +47,6 @@ const getJiraIssueIds = async (projectKeys) => {
           }
         );
         let { issues } = await response.json();
-        console.log(issues);
         if (!Array.isArray(issues)) {
           issues = [issues];
         }
