@@ -1,7 +1,16 @@
 const fetch = (...args) =>
   import("node-fetch").then(({ default: fetch }) => fetch(...args));
 require("dotenv").config();
+var fs = require("fs");
+var util = require("util");
+var log_file = fs.createWriteStream(__dirname + "/debug.log", { flags: "w" });
+var log_stdout = process.stdout;
 
+console.log = function (d) {
+  //
+  log_file.write(util.format(d) + "\n");
+  log_stdout.write(util.format(d) + "\n");
+};
 const getProjectsKeys = async () => {
   const index = [0, 100, 200, 300, 400];
   const projectKeys = [];
@@ -30,9 +39,36 @@ const getProjectsKeys = async () => {
   );
   return projectKeys;
 };
+const deleteTickets = async (issueKeys) => {
+  await Promise.all(
+    issueKeys.map(async (key) => {
+      try {
+        const response = await fetch(
+          `${process.env.URL}/rest/api/3/issue/${key}`,
+          {
+            method: "DELETE",
+            headers: {
+              Authorization: `Basic ${process.env.API_KEY}`,
+              Accept: "application/json",
+            },
+          }
+        );
+        if (response.ok) {
+          console.log(
+            `${new Date().toGMTString()} - Issue ${key} has been deleted.`
+          );
+        }
+      } catch (err) {
+        console.log(
+          `${new Date().toGMTString()} - There was an error when trying to delete issue with key ${key}:`,
+          err
+        );
+      }
+    })
+  );
+};
 
-const getJiraIssueIds = async (projectKeys) => {
-  const issueKeys = [];
+const deleteIssuesInProjects = async (projectKeys) => {
   await Promise.all(
     projectKeys.map(async (key) => {
       try {
@@ -48,46 +84,37 @@ const getJiraIssueIds = async (projectKeys) => {
         );
         let data = await response.json();
         const { issues } = data;
+        if(data.errorMessages){
+          console.log(`${new Date().toGMTString()} - An error occured in the ${key} project. This is what Atlassian says:\n
+          ${
+            data.errorMessages
+          }\n -------------------------------------------------------------------------------`)
+          return;
+        }
+        if(issues.length === 0) {
+          console.log(`\n${new Date().toGMTString()} - All tickets in project ${key} have been deleted.\n`);
+          return;
+        }
         if (issues) {
           const keys = issues.map((issue) => issue.key);
-          issueKeys.push(...keys);
-        } else {
-          console.log(
-            `↠ No issues were found in project ${key}. This is what Atlassian says:\n
-            ${data.errorMessages}\n -------------------------------------------------------------------------------`
-          );
+          await deleteTickets(keys);
+          await deleteIssuesInProjects([key]);
+          return;
         }
       } catch (err) {
-        console.log(`Something went wrong with the ${key} project:`, err);
-      }
-    })
-  );
-  return issueKeys;
-};
-
-const deleteTickets = async (issueKeys) => {
-  await Promise.all(
-    issueKeys.map(async (key) => {
-      try {
-        await fetch(`${process.env.URL}/rest/api/3/issue/${key}`, {
-          method: "DELETE",
-          headers: {
-            Authorization: `Basic ${process.env.API_KEY}`,
-            Accept: "application/json",
-          },
-        });
-      } catch (err) {
         console.log(
-          `There was an error when trying to delete issue with key ${key}:`,
+          `${new Date().toGMTString()} - Something went wrong with the ${key} project:`,
           err
         );
+        return;
       }
     })
   );
+  return true; 
 };
 
 module.exports = {
   getProjectsKeys,
-  getJiraIssueIds,
+  deleteIssuesInProjects,
   deleteTickets,
 };

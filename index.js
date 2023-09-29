@@ -1,9 +1,15 @@
-const {
-  getProjectsKeys,
-  getJiraIssueIds,
-  deleteTickets,
-} = require("./helpers.js");
+const { getProjectsKeys, deleteIssuesInProjects } = require("./helpers.js");
 require("dotenv").config();
+
+var fs = require("fs");
+var util = require("util");
+var log_file = fs.createWriteStream(__dirname + "/debug.log", { flags: "w" });
+var log_stdout = process.stdout;
+
+console.log = function (d) {
+  log_file.write(util.format(d) + "\n");
+  log_stdout.write(util.format(d) + "\n");
+};
 
 const script = async () => {
   const projectKeys = await getProjectsKeys();
@@ -13,16 +19,14 @@ const script = async () => {
       projectKeys.splice(index, 1);
     }
     console.log(
-      "✅ All project keys have been found and CSPV3X was taken out of the list\n"
+      `${new Date().toGMTString()} - ✅ All project keys have been found and CSPV3X was taken out of the list\n`
     );
-    const issueKeys = await getJiraIssueIds(projectKeys);
-    console.log(
-      "✅ All issues in the projects you have access to have been collected. Starting to delete issues now...\n"
-    );
-    await deleteTickets(issueKeys);
-    console.log(
-      "✅ The issues have been deleted. Please read the console for any errors that might have occurred.\n"
-    );
+    const finished = await deleteIssuesInProjects(projectKeys);
+    if(finished){
+      console.log(
+        `${new Date().toGMTString()} - ✅ All the issues have been deleted. Please check the debug.log file for any errors that might have occurred.\n`
+      );
+    }
   }
 };
 
