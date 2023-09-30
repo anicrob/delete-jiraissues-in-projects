@@ -59,8 +59,7 @@ const deleteTickets = async (issueKeys) => {
         }
       } catch (err) {
         console.log(
-          `${new Date().toGMTString()} - There was an error when trying to delete issue with key ${key}:`,
-          err
+          `${new Date().toGMTString()} - ERROR: There was an error when trying to delete issue with key ${key}.`,
         );
       }
     })
@@ -84,14 +83,14 @@ const deleteIssuesInProjects = async (projectKeys) => {
         let data = await response.json();
         const { issues } = data;
         if(data.errorMessages){
-          console.log(`${new Date().toGMTString()} - An error occured in the ${key} project. This is what Atlassian says:\n
+          console.log(`${new Date().toGMTString()} - ERROR: An error occured in the ${key} project. This is what Atlassian says:\n
           ${
             data.errorMessages
           }\n -------------------------------------------------------------------------------`)
           return;
         }
         if(issues.length === 0) {
-          console.log(`\n${new Date().toGMTString()} - All tickets in project ${key} have been deleted.\n`);
+          console.log(`\n${new Date().toGMTString()} - All tickets in project ${key} have been deleted 🎉\n`);
           return;
         }
         if (issues) {
@@ -102,7 +101,7 @@ const deleteIssuesInProjects = async (projectKeys) => {
         }
       } catch (err) {
         console.log(
-          `${new Date().toGMTString()} - Something went wrong with the ${key} project:`,
+          `${new Date().toGMTString()} - ERROR: Something went wrong with the ${key} project:`,
           err
         );
         return;

@@ -12,6 +12,7 @@ console.log = function (d) {
 };
 
 const script = async () => {
+  const start = Date.now();
   const projectKeys = await getProjectsKeys();
   if (projectKeys) {
     if (projectKeys.includes("CSPV3X")) {
@@ -22,9 +23,13 @@ const script = async () => {
       `${new Date().toGMTString()} - ✅ All project keys have been found and CSPV3X was taken out of the list\n`
     );
     const finished = await deleteIssuesInProjects(projectKeys);
-    if(finished){
+    if (finished) {
+      const end = Date.now();
+      const totalTime = end - start;
       console.log(
-        `${new Date().toGMTString()} - ✅ All the issues have been deleted. Please check the debug.log file for any errors that might have occurred.\n`
+        `${new Date().toGMTString()} - ✅ All the issues have been deleted in ${
+          totalTime / 1000
+        } seconds. \n\n\n → Please check the debug.log file for any errors that might have occurred.\n`
       );
     }
   }
