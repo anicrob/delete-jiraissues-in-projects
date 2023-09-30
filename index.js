@@ -1,4 +1,4 @@
-const { getProjectsKeys, deleteIssuesInProjects } = require("./helpers.js");
+const { getProjectsKeys, deleteIssuesInProjects, getTicketCount } = require("./helpers.js");
 require("dotenv").config();
 
 var fs = require("fs");
@@ -26,10 +26,11 @@ const script = async () => {
     if (finished) {
       const end = Date.now();
       const totalTime = end - start;
+      const ticketCount = getTicketCount();
       console.log(
-        `${new Date().toGMTString()} - ✅ All the issues have been deleted in ${
+        `${new Date().toGMTString()} - ✅ ${ticketCount} issues have been deleted in ${
           totalTime / 1000
-        } seconds. \n\n\n → Please check the debug.log file for any errors that might have occurred.\n`
+        } seconds. \n\n\n→ Please check the debug.log file for any errors that might have occurred.\n`
       );
     }
   }

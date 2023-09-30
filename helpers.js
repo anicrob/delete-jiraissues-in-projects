@@ -5,7 +5,7 @@ var fs = require("fs");
 var util = require("util");
 var log_file = fs.createWriteStream(__dirname + "/debug.log", { flags: "w" });
 var log_stdout = process.stdout;
-
+var count = 0;
 console.log = function (d) {
   log_file.write(util.format(d) + "\n");
   log_stdout.write(util.format(d) + "\n");
@@ -53,13 +53,14 @@ const deleteTickets = async (issueKeys) => {
           }
         );
         if (response.ok) {
+          count += 1;
           console.log(
             `${new Date().toGMTString()} - Issue ${key} has been deleted.`
           );
         }
       } catch (err) {
         console.log(
-          `${new Date().toGMTString()} - ERROR: There was an error when trying to delete issue with key ${key}.`,
+          `${new Date().toGMTString()} - ERROR: There was an error when trying to delete issue with key ${key}.`
         );
       }
     })
@@ -82,15 +83,17 @@ const deleteIssuesInProjects = async (projectKeys) => {
         );
         let data = await response.json();
         const { issues } = data;
-        if(data.errorMessages){
+        if (data.errorMessages) {
           console.log(`${new Date().toGMTString()} - ERROR: An error occured in the ${key} project. This is what Atlassian says:\n
           ${
             data.errorMessages
-          }\n -------------------------------------------------------------------------------`)
+          }\n -------------------------------------------------------------------------------`);
           return;
         }
-        if(issues.length === 0) {
-          console.log(`\n${new Date().toGMTString()} - All tickets in project ${key} have been deleted 🎉\n`);
+        if (issues.length === 0) {
+          console.log(
+            `\n${new Date().toGMTString()} - All tickets in project ${key} have been deleted 🎉\n`
+          );
           return;
         }
         if (issues) {
@@ -108,10 +111,15 @@ const deleteIssuesInProjects = async (projectKeys) => {
       }
     })
   );
-  return true; 
+  return true;
+};
+
+const getTicketCount = () => {
+  return count;
 };
 
 module.exports = {
   getProjectsKeys,
-  deleteIssuesInProjects
+  deleteIssuesInProjects,
+  getTicketCount,
 };
