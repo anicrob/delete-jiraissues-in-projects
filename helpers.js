@@ -10,6 +10,9 @@ console.log = function (d) {
   log_file.write(util.format(d) + "\n");
   log_stdout.write(util.format(d) + "\n");
 };
+
+const getTicketCount = () => count;
+
 const getProjectsKeys = async () => {
   const index = [0, 100, 200, 300, 400];
   const projectKeys = [];
@@ -112,10 +115,6 @@ const deleteIssuesInProjects = async (projectKeys) => {
     })
   );
   return true;
-};
-
-const getTicketCount = () => {
-  return count;
 };
 
 module.exports = {

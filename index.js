@@ -1,4 +1,8 @@
-const { getProjectsKeys, deleteIssuesInProjects, getTicketCount } = require("./helpers.js");
+const {
+  getProjectsKeys,
+  deleteIssuesInProjects,
+  getTicketCount,
+} = require("./helpers.js");
 require("dotenv").config();
 
 var fs = require("fs");
