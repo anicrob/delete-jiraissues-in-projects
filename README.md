@@ -3,7 +3,7 @@
 
 ## Description
 
-Follow the set up directions in the Setup Instructions section to run this script. This script will allow you to find any filters that contain a certain keyword (not in the title but within the filter jql itself). This data is then exported into a CSV file.
+Follow the set up directions in the Setup Instructions section to run this script. This script will allow you to delete all tickets within all projects except for one project (which is CSPV3X in this script)
 
 ## Table of Contents
 * [Setup Instructions](#setup-instructions)
