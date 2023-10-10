@@ -55,11 +55,18 @@ const deleteTickets = async (issueKeys) => {
             },
           }
         );
-        if (response.ok) {
+        if (response.status === 403) {
+          console.log(
+            `You do not have permissions to delete the issue with key ${key}. Here is the error from Atlassian: ${response.status} - ${response.statusText}`
+          );
+          return;
+        }
+        if (response.status === 200) {
           count += 1;
           console.log(
             `${new Date().toGMTString()} - Issue ${key} has been deleted.`
           );
+          return;
         }
       } catch (err) {
         console.log(
