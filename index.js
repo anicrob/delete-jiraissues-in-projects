@@ -19,13 +19,13 @@ const script = async () => {
   const start = Date.now();
   const projectKeys = await getProjectsKeys();
   if (projectKeys) {
-    if (projectKeys.includes("CSPV3X")) {
-      const index = projectKeys.indexOf("CSPV3X");
-      projectKeys.splice(index, 1);
-    }
-    console.log(
-      `${new Date().toGMTString()} - ✅ All project keys have been found and CSPV3X was taken out of the list\n`
-    );
+    // if (projectKeys.includes("CSPV3X")) {
+    //   const index = projectKeys.indexOf("CSPV3X");
+    //   projectKeys.splice(index, 1);
+    // }
+    // console.log(
+    //   `${new Date().toGMTString()} - ✅ All project keys have been found and CSPV3X was taken out of the list\n`
+    // );
     const finished = await deleteIssuesInProjects(projectKeys);
     if (finished) {
       const end = Date.now();

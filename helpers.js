@@ -61,7 +61,7 @@ const deleteTickets = async (issueKeys) => {
           );
           return;
         }
-        if (response.status === 200) {
+        if (response.status === 204) {
           count += 1;
           console.log(
             `${new Date().toGMTString()} - Issue ${key} has been deleted.`
