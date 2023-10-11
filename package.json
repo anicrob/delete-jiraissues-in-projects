@@ -1,5 +1,5 @@
 {
-  "name": "get-inactive-user-dashbards-filters",
+  "name": "remove-jira-issues-in-project",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
