@@ -19,12 +19,12 @@ const script = async () => {
   const start = Date.now();
   const projectKeys = await getProjectsKeys();
   if (projectKeys) {
-    if (projectKeys.includes("CSPV3X")) {
-      const index = projectKeys.indexOf("CSPV3X");
+    if (projectKeys.includes(`${process.env.PROJECT_TO_EXCLUDE}`)) {
+      const index = projectKeys.indexOf(`${process.env.PROJECT_TO_EXCLUDE}`);
       projectKeys.splice(index, 1);
     }
     console.log(
-      `${new Date().toGMTString()} - ✅ All project keys have been found and CSPV3X was taken out of the list\n`
+      `${new Date().toGMTString()} - ✅ All project keys have been found and ${process.env.PROJECT_TO_EXCLUDE} was taken out of the list\n`
     );
     const finished = await deleteIssuesInProjects(projectKeys);
     if (finished) {
