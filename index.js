@@ -24,7 +24,7 @@ const script = async () => {
       projectKeys.splice(index, 1);
     }
     console.log(
-      `${new Date().toGMTString()} - ✅ All project keys have been found and ${process.env.PROJECT_TO_EXCLUDE} was taken out of the list\n`
+      `${new Date().toGMTString()} - ✅ All project keys have been found and ${process.env.PROJECT_TO_EXCLUDE}  was taken out of the list\n`
     );
     const finished = await deleteIssuesInProjects(projectKeys);
     if (finished) {
